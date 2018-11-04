@@ -1,114 +1,120 @@
 #include <iostream>
-#include <vector>
-#include <string>
 using namespace std;
 
-class UserList{
-
-private:
-
-//int id;
-int priority;
-string name;
+class Vector {
 
 public:
 
-UserList(){
+	int size;
+	int *arr;
 
-    this->priority = 0;
-    this->name = "Nigga";
+	Vector() {
 
-}
+		arr = new int[5];
 
-UserList(int priority, string name){
+	}
 
-    this->priority = priority;
-    this->name = name;
+    Vector(int size) {
 
-}
+		this->size = size;
+		this->arr = new int[this->size];
 
-string GetName(){
-
-    return this->name;
-
-}
-
-// int GetId(){
-
-//     return this->id;
-
-// }
-
-int GetPriority(){
-
-    return this->priority;
-
-}
-
-void SetPriority(int priority){
-
-    this->priority = priority;
-
-}
-
-void SetName(string name){
-
-    this->name = name;
-
-}
+	}
 
 
-    
+	Vector(int size, int *arr) {
+
+		this->size = size;
+		for (int i = 0; i < this->size; ++i) {
+
+			this->arr[i] = arr[i];
+
+		}
+
+	}
+
+
+	Vector operator = (const Vector  &v) {
+		
+		//for (int i = 0; i < this->size; ++i) {
+		//	this->arr[i] = v.arr[i];
+		//	cout << this->arr[i] << endl;
+		//}
+
+		return Vector(this->size=v.size,this->arr = v.arr);
+	}
+
+	Vector operator ++ (int) {
+		
+        int* arr = new int[this->size];
+        int size = this->size + 1;
+        for(int i = 0; i < size - 1; ++i){
+
+            arr[i] = this->arr[i];
+
+        }
+		delete [] this->arr;
+        this->arr = new int[size];
+        for(int i = 0; i < size - 1; ++i){
+
+            this->arr[i] = arr[i];
+
+        }
+
+        return Vector(this->size = size,this->arr);
+
+
+	}
+
 
 };
 
-void ShowList(vector<UserList> &hub){
-    cout <<hub.size()<<endl;
-    for(int i = 0; i < hub.size(); ++i)
-        cout <<"Name: "<< hub[i].GetName()<< "  Priority: "<< hub[i].GetPriority()<<endl;
-        
-}
 
 
+int main()
+{
+	Vector v1 = Vector();
+	Vector v2 = Vector();
+	for (int i = 0; i < 5; ++i) {
 
-int main(){
-    
-    vector<UserList> hub;
-    int c,p;
-    string name;
-    int flag = true;
-    for(;flag;){
-        cin >> c;
-        switch(c){
-            case 0:
-                
-                cout <<"Enter name and priority"<<endl;
-                cin >>name>>p;
-                hub.push_back(UserList(p,name));
-                
-                for(int i=1;i<hub.size();i++)     
-	                for(int j=i;j>0 && hub[j-1].GetPriority()>hub[j].GetPriority();j--){
+		v1.arr[i] = i * 2;
+		v2.arr[i] = i * 3;
 
-                        //hub[j-1].GetPriority() hub[j].GetPriority()
-                        int tmp = hub[j-1].GetPriority();
-                        hub[j-1].SetPriority(hub[j].GetPriority());
-                        hub[j].SetPriority(tmp);
+	}
 
-                    }
-			            
-                break;
-            case 1:
-                
-                 ShowList(hub);
-      
-                break;
-            case 2:
-                flag = false;
-                break;
-        }
+	for (int i = 0; i < 5; ++i) {
 
-    }
+		cout << v1.arr[i] << endl;
 
+	}
+	cout << "\n\n" << endl;
 
-    return 0;
+	for (int i = 0; i < 5; ++i) {
+
+		cout << v2.arr[i] << endl;
+
+	}
+
+	cout << "\n\n" << endl;
+
+	v1 = v2;
+    cout <<"asdasd"<<endl;
+	for (int i = 0; i < 5; ++i) {
+	
+		cout << v1.arr[i] << endl;
+	
+	}
+    cout <<"asdasd2"<<endl;
+	
+    v1++;
+
+	cout << v1.size <<endl;
+    cout <<"asdasd3"<<endl;
+	// for (int i = 0; i < v1.size; ++i) {
+
+	// 	cout << v1.arr[i] << endl;
+
+	// }
+
+	return 0;
 }

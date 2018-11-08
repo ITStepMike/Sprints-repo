@@ -1,78 +1,31 @@
 package main
 
 import (
-  "math"
-  "fmt"
+	"fmt"
+	"math"
 )
+
 
 func main() {
   
-  var s, e, acc float64 = -10, 10, 0.001
-  //xa := math.Sin((2-math.Cos(x)/2)+1) - 1.2
-  var max float64 = 100
-  var maxd, temp float64
-  for i:= s; i < e; i = i + acc {
+  //var xa float64 = 1/math.Tan(x) - x/2
+  var a, acc, b  float64 = 3.5, 0.001, 3.7 // функції будуть перетинатися на графіку (в додатніх випадках) на проміжку від [0;нескінченності)
+  var arr[4] float64
+  j := 0
+  for i := a + acc; j < 4; i+=acc {
 
-    xa := math.Sin((2-math.Cos(i)/2)+1) - 1.2
-    switch{
-
-    case xa < 0 && i < 0:
-      //    fmt.Printf("%f  ",i)
-      if xa < i{
-        temp = -xa + i
-      }else if i < xa{
-        temp = -i + xa
-      }
-      fmt.Printf("%f  ",temp)
-      break;
-
-    case xa < 0 && i > 0:
-      //    fmt.Printf("%f  ",i)
-      if -xa > i{
-        temp = (-xa) - i
-      }else if -xa < i{
-        temp = i + xa
-      }
-      fmt.Printf("%f  ",temp)
-      break;
-
-    case xa > 0 && i < 0:
-      //fmt.Printf("%f  ",i)
-      if xa < -i{
-        temp = xa - (-i)
-      }else if xa > -i{
-        temp = xa + i
-      } 
-      break;
-
-    case xa > 0 && i > 0:
-      ////fmt.Printf("%f  ",i)
-        if xa > i{
-          temp = xa - i
-        }else if xa < i{
-          temp = i - xa
-        }
-      break;
-
-    case i == xa:
-      ////fmt.Printf("%f  ",i)
-      fmt.Println("5")
-      temp = 0
-      break; 
-
+    ans := (a - acc) - (1/math.Tan(i) - i/2)/((1/math.Tan(b) - b/2) - (1/math.Tan(i) - i/2)) * (b - (1/math.Tan(i) - i/2))
+    ans = 1/math.Tan(ans) - ans/2
+    fmt.Println(ans)
+    if ans > 0{
+      arr[j] = i
+      arr[j+1] = ans
+      j = 4;
     }
-    if max > temp{
-      max = temp
-      maxd = i
-    }
-    
-    
+
   }
 
-
-
-  fmt.Println(maxd)
-  fmt.Println(max)
-  fmt.Println(temp)
+  fmt.Println(arr)
+  
 
 }

@@ -8,14 +8,14 @@ import (
 //f(x) = ctg(x) - x/2 = 0
 func f(x float64) float64 {
 
-	return (-1/(math.Sin(x)*math.Sin(x)) - 1/2)
+	return (1/math.Tan(x) - x/2)
 
 }
 
 //f'(x) = -1/(sin(x)*sin(x)) - 1/2
 func fp1(x float64) float64 {
 
-	return (1/math.Tan(x) - x/2)
+	return (-1/(math.Sin(x)*math.Sin(x)) - 1/2)
 
 }
 
@@ -27,25 +27,24 @@ func fp2(x float64) float64 {
 }
 
 func main() {
-	// var a,b,acc float64 = 1,1.5,0.001
-	var a, b, acc float64 = 1, 1.3, 0.001
-	//var s []float64 //s = append(s,dasdasd)
-	fmt.Println(f(a) * fp2(a)) // f(a) * f''(a) > 0 тоді початкове наближення = 1
-	fmt.Println(f(b) * fp2(b)) // f(a) * f''(a) > 0 тоді початкове наближення = 1
-	var j = 0
-	var xn float64 = a
-	var dx float64
-	var d float64
-	for i := xn; j < 10; i = xn {
+	
+	var a,b,acc float64 = 1, 1.3, 0.001
+	
+	fmt.Println(b)
+	var flag = true
+	var xn float64 = (a+b)/2
+	for ;flag;{
 
-		dx := f(i) / fp1(i)
-		fmt.Printf(" %v  x= %f  f(x)= %f  f'(x)= %f  dx= %f \n", j, xn, (1/math.Tan(i) - i/2), -1/(math.Sin(i)*math.Sin(i))-1/2, dx)
-		xn = xn + dx
-		d = math.Abs((xn - dx) - xn)
-		j++
-		fmt.Println(d)
+		x0 := xn
+		xn = x0 - f(x0)
+		fmt.Println(xn)
+		
+		if math.Abs(x0 - xn) < acc{
+			flag = false
+		}
+		
 
 	}
-	fmt.Println(dx, acc, b)
+	fmt.Println(acc)
 
 }

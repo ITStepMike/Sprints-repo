@@ -1,187 +1,48 @@
 #include <iostream>
-#include <vector>
+#include <math.h>
+#include<locale>
 using namespace std;
-
-class Matrix{
-
-private:
-
-int** arr;
-int m,n;
-
-public:
-
-Matrix(int m,int n){
-
-	this->m = m;
-	this->n = n;
-
-	arr = new int*[m]; 
-	    for (int i = 0; i < m; i++){
-
-	        arr[i] = new int[n];			
-		
-		}
-
-	cout <<"Enter enter elements of the matrix"<<endl;
-	for (int i = 0; i < m; i++){
-
-		for (int j = 0; j < n; j++){ 
-
-		    cout << "Inter element " << "[" << i << "][" << j << "]  "; 
-		    cin >> arr[i][j]; 
-
-		}
-
-	} 
-
-	for (int i = 0; i < m; i++){
-
-		for (int j = 0; j < n; j++){ 
-
-		    cout << arr[i][j]<<"  "; 
-
-		}
-
-		cout <<endl;
-
-	} 
-
+double xf(double x,double y) {
+	return sin(x+y)+0.1-1.5*x;
 }
-
-int GetM(){
-
-	return this->m;
-
+double dxx(double x, double y) {
+	return cos(x+y)-1.5;
 }
-
-int GetN(){
-
-	return this->n;
-
+double dxy(double x, double y) {
+	return cos(x+y);
 }
-
-// void SetMatrix(){
-
-	//cout <<"Enter enter elements of the matrix"<<endl;
-
-// 	for(int j = 0; j < this->m; ++j){
-// 		for(int k = 0; k < this->n; ++k)
-// 		{
-// 			cin >>this->arr[m][n];
-// 		}
-// 	}
-
-// }
-
-void SetElement(int m, int n, int el){
-
-	if(m < this->m && n < this->n){
-		arr[m][n] = el;
-	}
-	else{
-		cout <<"You have entered wrong positions of the element"<<endl;
-	}
-
+double yf(double x,double y) {
+	return x*x+y*y-1;
 }
-
-int GetElement(int m, int n){
-
-	if(m < this->m && n < this->n){
-		return arr[m][n];
-	}
-	else{
-		cout <<"You have entered wrong positions of the element"<<endl;
-		return 0;
-	}
-
+double dyx(double x) {
+	return 2*x;
 }
-
-
-};
-
-int main()
-{
-	
-	int c;
-	cout <<"Enter matrix count"<<endl;
-	cin >>c;
-	if (c == 0){
-		cout <<"Matrix count need to be > 0"<<endl;
-		for(;true;){
-			
-			cin >>c;
-			if(c > 0){
-				break;
-			}
-
-		}
-	
+double dyy(double y) {
+	return 2*y;
+}
+void method(double x,double y, double eps) {
+	int k=1;
+	double xprev,yprev,xcurr=x,ycurr=y,delta1,delta2,J;
+	while(fabs(yprev-ycurr)>eps || fabs(xprev-xcurr)>eps) {
+		xprev=xcurr;
+		yprev=ycurr;
+		J=dxx(xprev,yprev)*dyy(yprev)-dxy(xprev,yprev)*dyx(xprev);
+		delta1=xf(xprev,yprev)*dyy(yprev)-yf(xprev,yprev)*dxy(xprev,yprev);
+		delta2=dxx(xprev,yprev)*yf(xprev,yprev)-xf(xprev,yprev)*dyx(xprev);
+		xcurr = xprev-delta1/J;
+		ycurr = ycurr - delta2/J;
+		cout<<"x["<<k<<"]="<<xcurr<<"\t"<<"y["<<k<<"]="<<ycurr<<endl;
+		k++;
 	}
-	vector<Matrix> arr;
-	int m,n;
-	for(int i = 0; i < c; ++i){
-
-		cout <<"Enter size (m,n) of the "<<i<<" matrix"<<endl;
-		cin >>m>>n;
-		if (m == 0 || n == 0){
-	
-			for(;true;){
-			
-				cout <<"Matrix size need to be > 0"<<endl;
-				cin >>m>>n;
-				if(n > 0 && m > 0){
-					break;
-				}
-
-			}
-	
-		}
-		arr.push_back(Matrix(m,n));
-		
-	}
-	
-	int k,el;
-	cout <<"0: Exit\n1: GetElement\n2: SetElement\n3: help"<<endl;
-	bool flag = true;
-
-
-	for(;flag;){
-
-		cin >>c;
-		switch(c){
-
-			case 0:
-				flag = false;
-			break;
-
-			case 1:
-
-				cout <<"Enter number of the matrix and m,n"<<endl;
-				cin >>k>>m>>n;
-				cout <<"["<<m<<"]"<<"["<<n<<"]= "<<arr[k].GetElement(m,n)<<endl;
-
-			break;
-
-			case 2:
-
-				cout <<"Enter number of the matrix, size (m,n) and element"<<endl;
-				cin >>k>>m>>n>>el;
-				arr[k].SetElement(m,n,el);
-			
-			break;
-
-			case 3:
-
-				cout <<"0: Exit\n1: GetElement\n2: SetElement\n3: help"<<endl;
-
-			break;
-		}
-
-	}
-
-	
-
-
+	cout<<"Корiнь: ("<<xcurr<<";"<<ycurr<<") при початковому наближеннi("<<x<<";"<<y<<")"<<endl;
+}
+int main(int argc, char** argv) {
+	setlocale(LC_ALL,"rus");
+	double x0=0.5,y0=1;
+	double eps=0.001;
+	method(x0,y0,eps);
+	x0=-0.7;
+	y0=-0.6;
+	method(x0,y0,eps);
 	return 0;
 }

@@ -5,46 +5,65 @@ import (
 	"math"
 )
 
-//f(x) = ctg(x) - x/2 = 0
-func f(x float64) float64 {
 
-	return (1/math.Tan(x) - x/2)
+func yf(x float64, y float64) float64{
 
-}
-
-//f'(x) = -1/(sin(x)*sin(x)) - 1/2
-func fp1(x float64) float64 {
-
-	return (-1/(math.Sin(x)*math.Sin(x)) - 1/2)
+	return 0.6*x*x+2*y*y-1
 
 }
 
-//f''(x) = (2*cos(x)*cos(x))/sin(x)*sin(x)*sin(x)
-func fp2(x float64) float64 {
+func dyx(x float64,) float64{
 
-	return (2 * math.Cos(x) * math.Cos(x)) / math.Sin(x) * math.Sin(x) * math.Sin(x)
+	return 2*0.6*x
+
+}
+
+func dyy(y float64) float64{
+
+	return 2*2*y
+
+}
+
+func xf(x float64, y float64) float64{
+
+	return math.Tan(x*y+0.2)-x*x
+
+}
+
+func dxx(x float64, y float64) float64{
+
+	return y*math.Tan(x*y+0.2)-2*x
+
+}
+
+func dxy(x float64, y float64) float64{
+
+	return x*math.Tan(x*y+0.2)
+
+}
+
+func method(x float64,y float64,acc float64){
+
+	var xprev,yprev,xcurr,ycurr,delta1,delta2,J float64 = 0,0,x,y,0,0,0
+
+	for k:=1;math.Abs(math.Abs(yprev)-math.Abs(ycurr))>acc || math.Abs(math.Abs(xprev)-math.Abs(xcurr))>acc;k++{
+
+		xprev=xcurr
+		yprev=ycurr
+		J=dxx(xprev,yprev)*dyy(yprev)-dxy(xprev,yprev)*dyx(xprev)
+		delta1=xf(xprev,yprev)*dyy(yprev)-yf(xprev,yprev)*dxy(xprev,yprev)
+		delta2=dxx(xprev,yprev)*yf(xprev,yprev)-xf(xprev,yprev)*dyx(xprev)
+		xcurr = xprev-delta1/J
+		ycurr = ycurr - delta2/J
+		fmt.Printf("x[%v]=%f\ty[%v]=%f\n",k,xcurr,k,ycurr)
+
+	}
 
 }
 
 func main() {
-	// var a,b,acc float64 = 1,1.5,0.001
-	var a, b, acc float64 = 1, 1.3, 0.001
-	//var s []float64 //s = append(s,dasdasd)
-	fmt.Println(f(a) * fp2(a)) // f(a) * f''(a) > 0 тоді початкове наближення = 1
-	fmt.Println(f(b) * fp2(b))
-	var j = 0
-	var xn float64 = a
-	var dx float64
-	var d float64 = 0.02
-	for i := xn; d > acc; i = xn {
 
-		dx := -(f(i) / fp1(i))
-		fmt.Printf(" %v  x= %f  f(x)= %f  f'(x)= %f  dx= %f \n", j, xn, (1/math.Tan(i) - i/2), -1/(math.Sin(i)*math.Sin(i))-1/2, dx)
-		xn = xn + dx
-		d = math.Abs(xn - (xn - dx))
-		j++
-
-	}
-	fmt.Println(dx)
+	var x0,y0,acc float64 = 0.5,0.5,0.001
+	method(x0,y0,acc)
 
 }

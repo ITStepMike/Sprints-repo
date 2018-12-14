@@ -1,48 +1,38 @@
-// package main
+package main
 
-// import (
-// 	"fmt"
-// 	"math"
-// )
-
-// type Answer struct{
-
-//   id int
-//   x float64
-//   res float64
-
-// }
-
-// //f(x) = ctg(x) - x/2 = 0
-// func f(x float64) float64 {
-
-// 	return (1/math.Tan(x) - x/2)
-
-// }
+import (
+	"fmt"
+	"math"
+)
 
 
-// func main() {
-  
-//   //var xa float64 = 1/math.Tan(x) - x/2
-//   var a, acc, b  float64 = 1, 0.001, 1.3
-//   obj := Answer{}
-// 	flag := true
-//   for i := a; flag ; {
+func yf(x float64) float64{
 
-//     i = i - ((f(i) / (f(b) - f(i)) ) * (b - i))
-//     fmt.Printf("%f   ",i)
-//     obj.x = i
-    
-//     if f(i) <= acc && f(i) >= 0{
-      
-//       obj.res = f(i)
-// 	  flag = false
-	  
-//     }
+	return 1-math.Cos(x)/2
 
-//   }
+}
 
-//   fmt.Println(obj)
-  
+func xf(x float64, y float64) float64{
 
-// }
+	return math.Sin(y+1)-x-1.2
+
+}
+
+func main() {
+
+	var x0,y0 float64 = -0.4,0.4
+	var acc float64 = 0.001
+	var xprev,yprev,xcurr,ycurr float64 = 0,0,x0,y0
+
+	for k:=1;math.Abs(yprev-ycurr)>acc || math.Abs(xprev-xcurr)>acc;k++{
+
+		xprev=xcurr
+		yprev=ycurr
+		xcurr = xf(xprev,yprev)
+		ycurr=yf(xprev)
+		fmt.Printf("x[%v]=%f\ty[%v]=%f\n",k,xcurr,k,ycurr)
+
+	}
+	fmt.Printf("yacc: %f\txacc: %f\n",math.Abs(yprev-ycurr),math.Abs(xprev-xcurr))
+
+}
